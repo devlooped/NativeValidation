@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
-namespace Devlooped
+namespace Devlooped.DataAnnotations
 {
     public static partial class NativeValidator
     {

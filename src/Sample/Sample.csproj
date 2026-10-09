@@ -10,6 +10,9 @@
     <InvariantGlobalization>true</InvariantGlobalization>
   </PropertyGroup>
   <ItemGroup>
+    <Using Include="Devlooped.DataAnnotations" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\NativeValidation\NativeValidation.csproj" />
     <ProjectReference Include="..\NativeValidation.Generator\NativeValidation.Generator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
   </ItemGroup>

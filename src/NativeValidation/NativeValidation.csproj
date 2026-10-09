@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <PackageId>Devlooped.DataAnnotations.NativeValidation</PackageId>
-    <RootNamespace>Devlooped</RootNamespace>
+    <RootNamespace>Devlooped.DataAnnotations</RootNamespace>
     <Description>AOT-safe validation for System.ComponentModel.DataAnnotations attributes.</Description>
     <IsAotCompatible>true</IsAotCompatible>
     <EnableAotAnalyzer>true</EnableAotAnalyzer>

@@ -10,7 +10,7 @@ namespace Devlooped.Tests
         public void AssemblyValidateRegistersAClosedTypeWithNoFactoryCall()
         {
             var source = Generate(@"
-[assembly: Devlooped.Validate<IOnlyValidated<int>>]
+[assembly: Devlooped.DataAnnotations.Validate<IOnlyValidated<int>>]
 public interface IOnlyValidated<T>
 {
     [System.ComponentModel.DataAnnotations.Required]
@@ -33,7 +33,7 @@ public interface ILabeled<T>
 }
 public static class Factory
 {
-    [Devlooped.Validated]
+    [Devlooped.DataAnnotations.Validated]
     public static ILabeled<T> Labeled<T>() => default;
 }
 class Program
@@ -57,10 +57,10 @@ public interface ILabeled<T>
 }
 public static class Factory
 {
-    [Devlooped.Validated]
+    [Devlooped.DataAnnotations.Validated]
     public static ILabeled<T> Labeled<T>() => default;
 
-    [Devlooped.Validated]
+    [Devlooped.DataAnnotations.Validated]
     public static object Make<T>() => Labeled<T>();
 }
 class Program

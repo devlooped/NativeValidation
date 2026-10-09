@@ -13,7 +13,7 @@ namespace Devlooped
         {
             context.RegisterSourceOutput(context.CompilationProvider, static (source, compilation) =>
             {
-                if (compilation.GetTypeByMetadataName("Devlooped.NativeValidation") == null)
+                if (compilation.GetTypeByMetadataName("Devlooped.DataAnnotations.NativeValidation") == null)
                     return;
 
                 NativeValidationCatalog.Emit(source, compilation);

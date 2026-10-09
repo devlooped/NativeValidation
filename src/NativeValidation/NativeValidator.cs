@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Text.RegularExpressions;
 
-namespace Devlooped
+namespace Devlooped.DataAnnotations
 {
     /// <summary>
     /// AOT-safe checks for the built-in validation attributes in

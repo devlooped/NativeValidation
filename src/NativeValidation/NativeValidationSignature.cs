@@ -2,7 +2,7 @@ using System;
 using System.Reflection;
 using System.Text;
 
-namespace Devlooped
+namespace Devlooped.DataAnnotations
 {
     /// <summary>
     /// Stable member signatures shared by the data-annotation source generator and

@@ -21,29 +21,13 @@ OSMF tier. A single fee covers all of [Devlooped packages](https://www.nuget.org
 <!-- #content -->
 ## Why
 
-[`Validator`](https://github.com/dotnet/runtime/blob/main/src/libraries/System.ComponentModel.Annotations/src/System/ComponentModel/DataAnnotations/Validator.cs) discovers attributes and properties by reflection. Native AOT and trimming keep a member only when static analysis can see a use, so the BCL marks those entry points [`RequiresUnreferencedCode`](https://learn.microsoft.com/dotnet/core/deploying/trimming/trimming-concepts#understanding-requiresunreferencedcode). Calling them in a trimmed or AOT publish reports [IL2026](https://learn.microsoft.com/dotnet/core/deploying/trimming/trim-warnings/il2026).
+`System.ComponentModel.DataAnnotations` finds attributes and property values by reflection. Native AOT and trimming keep a member only when static analysis can see a use, so `Validator` warns on a trimmed or AOT publish and can miss the properties it was meant to check. The framework has no AOT-safe replacement for object validation. The generators that ship with .NET cover options classes, Minimal APIs, and Blazor. A library or console app that validates its own objects sits outside them, and `Validator` has no API for method arguments or constructors.
 
-`TryValidateProperty` is annotated *"The Type of validationContext.ObjectType cannot be statically discovered."* `TryValidateObject` carries the same annotation as the [`ValidationContext`](https://github.com/dotnet/runtime/blob/main/src/libraries/System.ComponentModel.Annotations/src/System/ComponentModel/DataAnnotations/ValidationContext.cs) constructors that omit a display name:
-
-> Constructing a ValidationContext without a display name is not trim-safe because it uses reflection to discover the type of the instance being validated in order to resolve the DisplayNameAttribute when a display name is not provided.
-
-The constructor that takes the display name is trim-safe. .NET 10 added that overload so a caller can name the display string without the warning. Attribute discovery is a separate path. [`ValidationAttributeStore`](https://github.com/dotnet/runtime/blob/main/src/libraries/System.ComponentModel.Annotations/src/System/ComponentModel/DataAnnotations/ValidationAttributeStore.cs) loads properties with `TypeDescriptor.GetProperties` and attributes with `TypeDescriptor.GetAttributes`. `TypeDescriptor.GetProperties` is annotated because a `PropertyDescriptor`'s `PropertyType` cannot be statically discovered, and after trimming that call can return no properties ([dotnet/runtime#101202](https://github.com/dotnet/runtime/issues/101202)). [`TryValidateObject`](https://learn.microsoft.com/dotnet/api/system.componentmodel.dataannotations.validator.tryvalidateobject?view=net-10.0) on the .NET 10 API is still `RequiresUnreferencedCode`. The BCL has no AOT-safe replacement for it. A shared generator on `System.ComponentModel.Annotations` was [discussed in 2024](https://github.com/dotnet/aspnetcore/issues/46349) and was not a committed design.
-
-Several attribute constructors are trim-unsafe on their own, so the warning appears on the model even when application code never calls `Validator`:
-
-- [`MinLengthAttribute`](https://github.com/dotnet/runtime/issues/112111), `MaxLengthAttribute`, and `LengthAttribute` reflect for a `Count` property on types that do not implement `ICollection`. Trimming can remove that property.
-- [`RangeAttribute(Type, string, string)`](https://github.com/dotnet/runtime/blob/main/src/libraries/System.ComponentModel.Annotations/src/System/ComponentModel/DataAnnotations/RangeAttribute.cs) looks up a `TypeConverter`. Its annotation calls out generic converters such as `NullableConverter`, which need `DynamicallyAccessedMembers`.
-- [`CompareAttribute`](https://github.com/dotnet/runtime/blob/main/src/libraries/System.ComponentModel.Annotations/src/System/ComponentModel/DataAnnotations/CompareAttribute.cs) is annotated *"The property referenced by 'otherProperty' may be trimmed."* `IsValid` calls `GetRuntimeProperty` and `GetValue`.
-
-[`CustomValidationAttribute`](https://github.com/dotnet/runtime/blob/main/src/libraries/System.ComponentModel.Annotations/src/System/ComponentModel/DataAnnotations/CustomValidationAttribute.cs) keeps the validator type's public methods through `DynamicallyAccessedMembers`, then `IsValid` finds the method with `GetMethods` and calls it through `MethodInfo.Invoke`.
-
-The platform generators cover the hosts that own them. The [options validation generator](https://learn.microsoft.com/dotnet/core/extensions/options-validation-generator) emits `IValidateOptions<T>` for a partial class marked `[OptionsValidator]`. The generated `Validate` method still calls `Validator.TryValidateValue` and `new ValidationContext`, and it replaces `Range`, `MinLength`, `MaxLength`, and `Length` with generated attribute subclasses because those types rely on reflection. It suppresses IL2026 on the context with the justification that the object never takes the reflection path. [ASP.NET Core validation](https://learn.microsoft.com/aspnet/core/fundamentals/validation) generates metadata for Minimal APIs and Blazor in the assembly that calls `AddValidation`. It does not cover MVC or Razor Pages. Without that metadata, Blazor's `DataAnnotationsValidator` falls back to `Validator`, and that fallback checks top-level properties only. The attributes those generators still consume are the open gap: [not every `ValidationAttribute` is Native AOT compatible](https://github.com/dotnet/aspnetcore/issues/61221). [Library trimming guidance](https://learn.microsoft.com/dotnet/core/deploying/trimming/prepare-libraries-for-trimming) treats this class of API the way it treats reflection-based serializers: keep the declarative surface, and generate the code that runs.
-
-A Native AOT library or console app that validates its own objects, method arguments, or constructors sits outside those generators. `Validator` has no method or constructor API. This package is that layer. The attributes stay on the members. Each check becomes a direct call with the attribute arguments inlined, so the trimmer sees the check, the bounds, the display name, and the custom validator method.
+This package is that layer. The attributes stay on the members. A source generator turns each rule into a direct call with the attribute arguments inlined, so the published app keeps the check, the bounds, the display name, and any custom validator method.
 
 ## What
 
-`Devlooped.DataAnnotations.NativeValidation` is AOT-safe validation for `System.ComponentModel.DataAnnotations` attributes. Reference the package. The APIs live in the `Devlooped` namespace. A source generator reads the attributes during compilation, emits the checks, and registers them from a module initializer. Generated code does not instantiate validation attributes and does not reflect over members.
+`Devlooped.DataAnnotations.NativeValidation` is AOT-safe validation for `System.ComponentModel.DataAnnotations` attributes. Reference the package. The APIs live in the `Devlooped.DataAnnotations` namespace. A source generator reads the attributes during compilation, emits the checks, and registers them from a module initializer. Generated code does not instantiate validation attributes and does not reflect over members.
 
 `NativeValidator` follows `Validator`:
 
@@ -56,6 +40,8 @@ Property failures skip type-level rules and `IValidatableObject`. Object validat
 Pass a display name into `ValidationContext`. The overloads that omit it are the ones marked `RequiresUnreferencedCode`. Built-in checks use the display name the generator copied from `[Display(Name = ...)]` or `[DisplayName]`.
 
 ```csharp
+using Devlooped.DataAnnotations;
+
 public class Account
 {
     [Required]
@@ -91,7 +77,7 @@ NativeValidator.Required(value, "Email", "Email address", allowEmptyStrings: fal
 
 ## How
 
-`NativeValidation.Generator` ships in the package at `analyzers/dotnet/cs`. It emits `Devlooped.Generated.NativeValidationRegistrations` when the compilation can see `Devlooped.NativeValidation`. A module initializer calls one register method per closed type.
+`NativeValidation.Generator` ships in the package at `analyzers/dotnet/cs`. It emits `Devlooped.Generated.NativeValidationRegistrations` when the compilation can see `Devlooped.DataAnnotations.NativeValidation`. A module initializer calls one register method per closed type.
 
 Each annotated member is stored under its declaring type, metadata name (`set_Email`, `Rename`, `.ctor`), and [`NativeValidationSignature`](https://github.com/devlooped/NativeValidation/blob/main/src/NativeValidation/NativeValidationSignature.cs) (comma-separated parameter types). Object validation uses a second table. `RegisterProperties` stores the property name, type, and a getter lambda, so the value is read by a direct property access. Type-level attributes go through `RegisterType`. Interface implementations and overrides contribute attributes declared on the interface or base member. `[MetadataType]` buddy classes are included. After the generated rules pass, `IValidatableObject.Validate` is an interface call.
 
@@ -142,6 +128,31 @@ public static class Boxes
 ```csharp
 [assembly: Validate<Box<string>>]
 ```
+
+## .NET DataAnnotations Issues
+
+What follows is the state of the art in .NET as of October 9, 2026.
+
+[`Validator`](https://github.com/dotnet/runtime/blob/main/src/libraries/System.ComponentModel.Annotations/src/System/ComponentModel/DataAnnotations/Validator.cs) discovers attributes and properties by reflection. Native AOT and trimming keep a member only when static analysis can see a use, so the BCL marks those entry points [`RequiresUnreferencedCode`](https://learn.microsoft.com/dotnet/core/deploying/trimming/trimming-concepts#understanding-requiresunreferencedcode). Calling them in a trimmed or AOT publish reports [IL2026](https://learn.microsoft.com/dotnet/core/deploying/trimming/trim-warnings/il2026).
+
+`TryValidateProperty` is annotated *"The Type of validationContext.ObjectType cannot be statically discovered."* `TryValidateObject` carries the same annotation as the [`ValidationContext`](https://github.com/dotnet/runtime/blob/main/src/libraries/System.ComponentModel.Annotations/src/System/ComponentModel/DataAnnotations/ValidationContext.cs) constructors that omit a display name:
+
+> Constructing a ValidationContext without a display name is not trim-safe because it uses reflection to discover the type of the instance being validated in order to resolve the DisplayNameAttribute when a display name is not provided.
+
+The constructor that takes the display name is trim-safe. .NET 10 added that overload so a caller can name the display string without the warning. Attribute discovery is a separate path. [`ValidationAttributeStore`](https://github.com/dotnet/runtime/blob/main/src/libraries/System.ComponentModel.Annotations/src/System/ComponentModel/DataAnnotations/ValidationAttributeStore.cs) loads properties with `TypeDescriptor.GetProperties` and attributes with `TypeDescriptor.GetAttributes`. `TypeDescriptor.GetProperties` is annotated because a `PropertyDescriptor`'s `PropertyType` cannot be statically discovered, and after trimming that call can return no properties ([dotnet/runtime#101202](https://github.com/dotnet/runtime/issues/101202)). [`TryValidateObject`](https://learn.microsoft.com/dotnet/api/system.componentmodel.dataannotations.validator.tryvalidateobject?view=net-10.0) on the .NET 10 API is still `RequiresUnreferencedCode`. The BCL has no AOT-safe replacement for it. A shared generator on `System.ComponentModel.Annotations` was [discussed in 2024](https://github.com/dotnet/aspnetcore/issues/46349) and was not a committed design.
+
+Several attribute constructors are trim-unsafe on their own, so the warning appears on the model even when application code never calls `Validator`:
+
+- [`MinLengthAttribute`](https://github.com/dotnet/runtime/issues/112111), `MaxLengthAttribute`, and `LengthAttribute` reflect for a `Count` property on types that do not implement `ICollection`. Trimming can remove that property.
+- [`RangeAttribute(Type, string, string)`](https://github.com/dotnet/runtime/blob/main/src/libraries/System.ComponentModel.Annotations/src/System/ComponentModel/DataAnnotations/RangeAttribute.cs) looks up a `TypeConverter`. Its annotation calls out generic converters such as `NullableConverter`, which need `DynamicallyAccessedMembers`.
+- [`CompareAttribute`](https://github.com/dotnet/runtime/blob/main/src/libraries/System.ComponentModel.Annotations/src/System/ComponentModel/DataAnnotations/CompareAttribute.cs) is annotated *"The property referenced by 'otherProperty' may be trimmed."* `IsValid` calls `GetRuntimeProperty` and `GetValue`.
+
+[`CustomValidationAttribute`](https://github.com/dotnet/runtime/blob/main/src/libraries/System.ComponentModel.Annotations/src/System/ComponentModel/DataAnnotations/CustomValidationAttribute.cs) keeps the validator type's public methods through `DynamicallyAccessedMembers`, then `IsValid` finds the method with `GetMethods` and calls it through `MethodInfo.Invoke`.
+
+The platform generators cover the hosts that own them. The [options validation generator](https://learn.microsoft.com/dotnet/core/extensions/options-validation-generator) emits `IValidateOptions<T>` for a partial class marked `[OptionsValidator]`. The generated `Validate` method still calls `Validator.TryValidateValue` and `new ValidationContext`, and it replaces `Range`, `MinLength`, `MaxLength`, and `Length` with generated attribute subclasses because those types rely on reflection. It suppresses IL2026 on the context with the justification that the object never takes the reflection path. [ASP.NET Core validation](https://learn.microsoft.com/aspnet/core/fundamentals/validation) generates metadata for Minimal APIs and Blazor in the assembly that calls `AddValidation`. It does not cover MVC or Razor Pages. Without that metadata, Blazor's `DataAnnotationsValidator` falls back to `Validator`, and that fallback checks top-level properties only. The attributes those generators still consume are the open gap: [not every `ValidationAttribute` is Native AOT compatible](https://github.com/dotnet/aspnetcore/issues/61221). [Library trimming guidance](https://learn.microsoft.com/dotnet/core/deploying/trimming/prepare-libraries-for-trimming) treats this class of API the way it treats reflection-based serializers: keep the declarative surface, and generate the code that runs.
+
+A Native AOT library or console app that validates its own objects, method arguments, or constructors sits outside those generators. `Validator` has no method or constructor API. This package is that layer. The attributes stay on the members. Each check becomes a direct call with the attribute arguments inlined, so the trimmer sees the check, the bounds, the display name, and the custom validator method.
+
 <!-- #content -->
 ---
 <!-- include https://github.com/devlooped/sponsors/raw/main/footer.md -->

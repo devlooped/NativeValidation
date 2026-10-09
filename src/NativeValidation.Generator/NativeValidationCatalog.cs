@@ -256,7 +256,7 @@ namespace Devlooped
             {
                 var assemblies = new[]
                 {
-                    compilation.GetTypeByMetadataName("Devlooped.ValidatedAttribute")?.ContainingAssembly.Name,
+                    compilation.GetTypeByMetadataName("Devlooped.DataAnnotations.ValidatedAttribute")?.ContainingAssembly.Name,
                 };
                 foreach (var assembly in compilation.SourceModule.ReferencedAssemblySymbols)
                 {
@@ -666,7 +666,7 @@ namespace Devlooped
                 var first = constructor.Parameters[0].Type;
                 if (first.SpecialType is SpecialType.System_Int32 or SpecialType.System_Double)
                 {
-                    return "global::Devlooped.NativeValidator.Range(value, " + Primitive(attribute.ConstructorArguments[0]) + ", " + Primitive(attribute.ConstructorArguments[1]) + ", " + minimumExclusive + ", " + maximumExclusive + ", " + name + ", " + display + ", " + error + ")";
+                    return "global::Devlooped.DataAnnotations.NativeValidator.Range(value, " + Primitive(attribute.ConstructorArguments[0]) + ", " + Primitive(attribute.ConstructorArguments[1]) + ", " + minimumExclusive + ", " + maximumExclusive + ", " + name + ", " + display + ", " + error + ")";
                 }
 
                 if (attribute.ConstructorArguments[0].Value is not INamedTypeSymbol operand)
@@ -687,7 +687,7 @@ namespace Devlooped
                 var minimum = Quote(attribute.ConstructorArguments[1].Value as string ?? "");
                 var maximum = Quote(attribute.ConstructorArguments[2].Value as string ?? "");
                 var type = operand.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
-                return "global::Devlooped.NativeValidator.Range<" + type + ">(value, " + minimum + ", " + maximum + ", " + parser + ", " +
+                return "global::Devlooped.DataAnnotations.NativeValidator.Range<" + type + ">(value, " + minimum + ", " + maximum + ", " + parser + ", " +
                     Bool(Named(attribute, "ParseLimitsInInvariantCulture", false)) + ", " +
                     Bool(Named(attribute, "ConvertValueInInvariantCulture", false)) + ", " +
                     minimumExclusive + ", " + maximumExclusive + ", " + name + ", " + display + ", " + error + ")";
@@ -767,7 +767,7 @@ namespace Devlooped
                     ? "new global::System.Text.RegularExpressions.Regex(" + Quote(pattern!) + ")"
                     : "new global::System.Text.RegularExpressions.Regex(" + Quote(pattern!) + ", global::System.Text.RegularExpressions.RegexOptions.None, global::System.TimeSpan.FromMilliseconds(" + timeout.ToString(CultureInfo.InvariantCulture) + "))";
                 regexFields.Add("static readonly global::System.Text.RegularExpressions.Regex " + field + " = " + constructed + ";");
-                return "global::Devlooped.NativeValidator.Pattern(value, " + field + ", " + Quote(pattern!) + ", " + name + ", " + display + ", " + error + ")";
+                return "global::Devlooped.DataAnnotations.NativeValidator.Pattern(value, " + field + ", " + Quote(pattern!) + ", " + name + ", " + display + ", " + error + ")";
             }
 
             string? Compare(AttributeData attribute, ISymbol owner, string name, string display, string error, bool report)
@@ -785,7 +785,7 @@ namespace Devlooped
                 var cast = other.ContainingType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
                 var otherDisplay = DisplayName(other) ?? other.Name;
                 var read = "instance is " + cast + " target ? target." + other.Name + " : null";
-                return "global::Devlooped.NativeValidator.Compare(value, " + read + ", " + name + ", " + display + ", " + Quote(otherDisplay) + ", " + error + ")";
+                return "global::Devlooped.DataAnnotations.NativeValidator.Compare(value, " + read + ", " + name + ", " + display + ", " + Quote(otherDisplay) + ", " + error + ")";
             }
 
             string? Enum(AttributeData attribute, string name, string display, string error, bool report)
@@ -798,7 +798,7 @@ namespace Devlooped
                 }
 
                 var flags = enumType.GetAttributes().Any(candidate => candidate.AttributeClass?.ToDisplayString() == "System.FlagsAttribute");
-                return "global::Devlooped.NativeValidator.Enum<" + enumType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat) + ">(value, " + (flags ? "true" : "false") + ", " + name + ", " + display + ", " + error + ")";
+                return "global::Devlooped.DataAnnotations.NativeValidator.Enum<" + enumType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat) + ">(value, " + (flags ? "true" : "false") + ", " + name + ", " + display + ", " + error + ")";
             }
 
             string? Values(string method, AttributeData attribute, string name, string display, string error)
@@ -857,12 +857,12 @@ namespace Devlooped
                 }
                 else if (expected.IsValueType && expected.OriginalDefinition.SpecialType != SpecialType.System_Nullable_T)
                 {
-                    guard = "if (value is not " + qualified + " typed) return global::Devlooped.NativeValidator.ConversionFailed(value, " + Quote(expected.ToDisplayString()) + ", " + Quote(validator.Name) + ", " + Quote(method.Name) + ", " + Quote(memberName) + ");";
+                    guard = "if (value is not " + qualified + " typed) return global::Devlooped.DataAnnotations.NativeValidator.ConversionFailed(value, " + Quote(expected.ToDisplayString()) + ", " + Quote(validator.Name) + ", " + Quote(method.Name) + ", " + Quote(memberName) + ");";
                     argument = "typed";
                 }
                 else
                 {
-                    guard = "if (value is not null and not " + qualified + ") return global::Devlooped.NativeValidator.ConversionFailed(value, " + Quote(expected.ToDisplayString()) + ", " + Quote(validator.Name) + ", " + Quote(method.Name) + ", " + Quote(memberName) + ");";
+                    guard = "if (value is not null and not " + qualified + ") return global::Devlooped.DataAnnotations.NativeValidator.ConversionFailed(value, " + Quote(expected.ToDisplayString()) + ", " + Quote(validator.Name) + ", " + Quote(method.Name) + ", " + Quote(memberName) + ");";
                     argument = "(" + qualified + ")value";
                 }
 
@@ -873,7 +873,7 @@ namespace Devlooped
                     context = ", new global::System.ComponentModel.DataAnnotations.ValidationContext(instance, " + shown + ", (global::System.IServiceProvider?)null, (global::System.Collections.Generic.IDictionary<object, object?>?)null) { MemberName = " + name + " }";
                 }
 
-                return "block:" + guard + " return global::Devlooped.NativeValidator.CustomResult(" + call + "(" + argument + context + "), " + name + ", " + display + ", " + error + ");";
+                return "block:" + guard + " return global::Devlooped.DataAnnotations.NativeValidator.CustomResult(" + call + "(" + argument + context + "), " + name + ", " + display + ", " + error + ");";
             }
 
             string ErrorMessage(AttributeData attribute, bool report)
@@ -970,10 +970,10 @@ namespace Devlooped
                         for (var i = 0; i < slot.Rules.Count; i++)
                             ruleNames.Add(RuleFunction(functions[i], slot.Rules[i]));
 
-                        slots.Add("new global::Devlooped.NativeValidationSlot(" + slot.Index.ToString(CultureInfo.InvariantCulture) + ", " + (slot.HasRequired ? "true" : "false") + ", " + string.Join(", ", functions) + ")");
+                        slots.Add("new global::Devlooped.DataAnnotations.NativeValidationSlot(" + slot.Index.ToString(CultureInfo.InvariantCulture) + ", " + (slot.HasRequired ? "true" : "false") + ", " + string.Join(", ", functions) + ")");
                     }
 
-                    builder.Append("            global::Devlooped.NativeValidation.Register(typeof(");
+                    builder.Append("            global::Devlooped.DataAnnotations.NativeValidation.Register(typeof(");
                     builder.Append(qualified);
                     builder.Append("), ");
                     builder.Append(Quote(member.Member));
@@ -990,12 +990,12 @@ namespace Devlooped
                     if (value == null)
                         continue;
 
-                    properties.Add("new global::Devlooped.NativeValidationProperty(" + Quote(member.PropertyName!) + ", typeof(" + member.PropertyType + "), " + (value.HasRequired ? "true" : "false") + ", " + (member.Read ?? "null") + ", " + string.Join(", ", FunctionNames(member.Member, value)) + ")");
+                    properties.Add("new global::Devlooped.DataAnnotations.NativeValidationProperty(" + Quote(member.PropertyName!) + ", typeof(" + member.PropertyType + "), " + (value.HasRequired ? "true" : "false") + ", " + (member.Read ?? "null") + ", " + string.Join(", ", FunctionNames(member.Member, value)) + ")");
                 }
 
                 if (properties.Count > 0)
                 {
-                    builder.Append("            global::Devlooped.NativeValidation.RegisterProperties(typeof(");
+                    builder.Append("            global::Devlooped.DataAnnotations.NativeValidation.RegisterProperties(typeof(");
                     builder.Append(qualified);
                     builder.Append("), ");
                     builder.Append(string.Join(", ", properties));
@@ -1012,7 +1012,7 @@ namespace Devlooped
                         ruleNames.Add(RuleFunction(function, typeRules[i]));
                     }
 
-                    builder.Append("            global::Devlooped.NativeValidation.RegisterType(typeof(");
+                    builder.Append("            global::Devlooped.DataAnnotations.NativeValidation.RegisterType(typeof(");
                     builder.Append(qualified);
                     builder.Append("), ");
                     builder.Append(typeHasRequired ? "true" : "false");
@@ -1205,10 +1205,10 @@ namespace Devlooped
             static bool HasAttribute(IMethodSymbol method, string name) =>
                 method.OriginalDefinition.GetAttributes().Any(attribute =>
                     attribute.AttributeClass?.Name == name &&
-                    attribute.AttributeClass.ContainingNamespace.ToDisplayString() == "Devlooped");
+                    attribute.AttributeClass.ContainingNamespace.ToDisplayString() == "Devlooped.DataAnnotations");
 
             static bool IsValidateAttribute(INamedTypeSymbol? type) =>
-                type != null && type.Name == "ValidateAttribute" && type.Arity > 0 && type.ContainingNamespace.ToDisplayString() == "Devlooped";
+                type != null && type.Name == "ValidateAttribute" && type.Arity > 0 && type.ContainingNamespace.ToDisplayString() == "Devlooped.DataAnnotations";
 
             static bool IsValidation(INamedTypeSymbol? attribute)
             {
@@ -1256,7 +1256,7 @@ namespace Devlooped
             static string Call(string method, params string?[] arguments)
             {
                 var present = arguments.Where(argument => argument != null);
-                return "global::Devlooped.NativeValidator." + method + "(" + string.Join(", ", present) + ")";
+                return "global::Devlooped.DataAnnotations.NativeValidator." + method + "(" + string.Join(", ", present) + ")";
             }
 
             static string Literal(TypedConstant constant)

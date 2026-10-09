@@ -4,7 +4,7 @@ AOT-safe `System.ComponentModel.DataAnnotations` validation, extracted from the 
 
 ## API
 
-Namespace `Devlooped`.
+Namespace `Devlooped.DataAnnotations`.
 
 - `NativeValidator` is the caller-facing surface, shaped like `System.ComponentModel.DataAnnotations.Validator`. `TryValidateObject` / `ValidateObject` and `TryValidateProperty` / `ValidateProperty` use a `ValidationContext`. `Try*` returns bool and appends `ValidationResult`s. `Validate*` throws `ValidationException` for the first failure. `TryValidateObject` defaults to required properties only.
 - The per-check methods (`Required`, `StringLength`, and the rest) are the `IsValid` layer. A bad value returns `ValidationResult`, including a value of the wrong type. Malformed bounds still throw `InvalidOperationException`.
@@ -14,7 +14,7 @@ Namespace `Devlooped`.
 
 ## Generator
 
-`NativeValidation.Generator` ships inside the package at `analyzers/dotnet/cs`. It emits `Devlooped.Generated.NativeValidationRegistrations` when the compilation can see `Devlooped.NativeValidation`.
+`NativeValidation.Generator` ships inside the package at `analyzers/dotnet/cs`. It emits `Devlooped.Generated.NativeValidationRegistrations` when the compilation can see `Devlooped.DataAnnotations.NativeValidation`.
 
 Supported attributes match the built-in set enforced by `NativeValidator`, including `CustomValidationAttribute` as a direct static call. Any other `ValidationAttribute` subclass warns as `NVA001` and is not enforced. `NVA002` reports a supported attribute the generator had to skip.
 

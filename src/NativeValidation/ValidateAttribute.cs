@@ -1,4 +1,4 @@
-namespace Devlooped
+namespace Devlooped.DataAnnotations
 {
     /// <summary>
     /// Marks a factory whose closed type arguments and return type are validation targets.
