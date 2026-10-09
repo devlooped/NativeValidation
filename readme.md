@@ -26,9 +26,17 @@ public class Account
 var results = new List<ValidationResult>();
 var valid = NativeValidator.TryValidateObject(account, new ValidationContext(account), results, validateAllProperties: true);
 NativeValidator.ValidateProperty(" ", new ValidationContext(account) { MemberName = nameof(Account.Email) });
+
+var rename = typeof(Account).GetMethod(nameof(Account.Rename))!;
+NativeValidator.TryValidate(account, rename, results, "ada", 2);
+NativeValidator.Validate(account, rename, "a", 1);
 ```
 
-`TryValidateObject` and `TryValidateProperty` return `false` and append each `ValidationResult`. The matching `ValidateObject` and `ValidateProperty` methods throw `ValidationException` for the first failure. A null results collection stops at that failure. `TryValidateObject` without the bool checks required properties only, matching `Validator`. The same checks are available directly when you already have the attribute arguments:
+`TryValidateObject` and `TryValidateProperty` return `false` and append each `ValidationResult`. The matching `ValidateObject` and `ValidateProperty` methods throw `ValidationException` for the first failure. A null results collection stops at that failure. `TryValidateObject` without the bool checks required properties only, matching `Validator`.
+
+`TryValidate` and `Validate` run the rules registered for a method or constructor. Pass the `MethodBase` and the arguments in parameter order. `TryValidate` returns `false` and appends each `ValidationResult`; `Validate` throws `ValidationException` for the first failure. A null results collection stops at that failure. `Validator` has no equivalent. A method or constructor with no registered rules returns `true`.
+
+The same checks are available directly when you already have the attribute arguments:
 
 ```csharp
 NativeValidator.Required(value, "Email", "Email address", allowEmptyStrings: false, errorMessage: null);
