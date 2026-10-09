@@ -10,7 +10,7 @@ Namespace `Devlooped.DataAnnotations`.
 - The per-check methods (`Required`, `StringLength`, and the rest) are the `IsValid` layer. A bad value returns `ValidationResult`, including a value of the wrong type. Malformed bounds still throw `InvalidOperationException`.
 - `TryValidate` / `Validate(instance, method, arguments)` run the rules registered for a method or constructor. `Validator` has no equivalent.
 - `NativeValidation.Register`, `RegisterProperties`, and `RegisterType` are the generator entries. Lookups key a member by declaring type, metadata name (`set_Email`, `Save`, `.ctor`), and `NativeValidationSignature`. Property getters are emitted so object validation does not reflect.
-- `ValidatedAttribute` on a generic factory, and `[assembly: Validate<T>]`, close open generic targets the syntax walk cannot see.
+- `ValidatedAttribute` on a generic factory, a generic method that carries a `ValidationAttribute` subclass, and `[assembly: Validate<T>]`, close open generic targets the syntax walk cannot see.
 
 ## Generator
 

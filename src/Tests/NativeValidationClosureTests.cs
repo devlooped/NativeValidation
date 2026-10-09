@@ -73,6 +73,65 @@ class Program
             Assert.DoesNotContain("ILabeled<int>", source);
         }
 
+        [Fact]
+        public void ValidationAttributeOnAGenericMethodClosesTheReturnType()
+        {
+            var source = Generate(@"
+public class ChecksAttribute : System.ComponentModel.DataAnnotations.ValidationAttribute { }
+public interface ILabeled<T>
+{
+    [System.ComponentModel.DataAnnotations.Required]
+    T Label { get; set; }
+}
+public static class Factory
+{
+    [Checks]
+    public static ILabeled<T> Labeled<T>() => default;
+
+    [Checks]
+    public static object Make<T>() => Labeled<T>();
+}
+class Program
+{
+    void Use() => Factory.Make<int>();
+}
+");
+
+            Assert.Contains("ILabeled<int>", source);
+            Assert.DoesNotContain("ILabeled<string>", source);
+        }
+
+        [Fact]
+        public void ValidationAttributeOnANonGenericMethodDoesNotCloseTypes()
+        {
+            var source = Generate(@"
+public class ChecksAttribute : System.ComponentModel.DataAnnotations.ValidationAttribute { }
+public interface ILabeled<T>
+{
+    [System.ComponentModel.DataAnnotations.Required]
+    T Label { get; set; }
+}
+public static class Factory
+{
+    [Checks]
+    public static ILabeled<int> Fixed() => default;
+
+    [System.Obsolete]
+    public static ILabeled<T> Labeled<T>() => default;
+}
+class Program
+{
+    void Use()
+    {
+        Factory.Fixed();
+        Factory.Labeled<string>();
+    }
+}
+");
+
+            Assert.DoesNotContain("ILabeled<", source);
+        }
+
         static string Generate(string source)
         {
             var references = ((string)AppContext.GetData("TRUSTED_PLATFORM_ASSEMBLIES")!)
