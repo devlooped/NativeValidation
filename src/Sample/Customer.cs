@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Devlooped.Sample;
 
-[UnconditionalSuppressMessage("Trimming", "IL2026", Justification = "NativeAnnotations inlines CompareAttribute at compile time and reads the other property directly.")]
+[UnconditionalSuppressMessage("Trimming", "IL2026", Justification = "NativeValidation inlines CompareAttribute at compile time and reads the other property directly.")]
 public class Customer
 {
     [Required]
@@ -51,7 +51,7 @@ public class Customer
     public NotificationChannels Channels { get; set; }
 }
 
-[UnconditionalSuppressMessage("Trimming", "IL2026", Justification = "NativeAnnotations inlines RangeAttribute at compile time and does not run its type-converter constructor.")]
+[UnconditionalSuppressMessage("Trimming", "IL2026", Justification = "NativeValidation inlines RangeAttribute at compile time and does not run its type-converter constructor.")]
 public class CustomerPreferences
 {
     [Required]

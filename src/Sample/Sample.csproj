@@ -10,7 +10,7 @@
     <InvariantGlobalization>true</InvariantGlobalization>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NativeAnnotations\NativeAnnotations.csproj" />
-    <ProjectReference Include="..\NativeAnnotations.Generator\NativeAnnotations.Generator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\NativeValidation\NativeValidation.csproj" />
+    <ProjectReference Include="..\NativeValidation.Generator\NativeValidation.Generator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
   </ItemGroup>
 </Project>

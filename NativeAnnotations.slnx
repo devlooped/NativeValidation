@@ -1,6 +1,0 @@
-<Solution>
-  <Project Path="src/NativeAnnotations/NativeAnnotations.csproj" />
-  <Project Path="src/NativeAnnotations.Generator/NativeAnnotations.Generator.csproj" />
-  <Project Path="src/Tests/Tests.csproj" />
-  <Project Path="src/Sample/Sample.csproj" />
-</Solution>

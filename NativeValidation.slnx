@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="src/NativeValidation/NativeValidation.csproj" />
+  <Project Path="src/NativeValidation.Generator/NativeValidation.Generator.csproj" />
+  <Project Path="src/Tests/Tests.csproj" />
+  <Project Path="src/Sample/Sample.csproj" />
+</Solution>

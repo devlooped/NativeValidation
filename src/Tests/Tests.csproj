@@ -17,7 +17,7 @@
     <Using Include="Xunit" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NativeAnnotations\NativeAnnotations.csproj" />
-    <ProjectReference Include="..\NativeAnnotations.Generator\NativeAnnotations.Generator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
+    <ProjectReference Include="..\NativeValidation\NativeValidation.csproj" />
+    <ProjectReference Include="..\NativeValidation.Generator\NativeValidation.Generator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
   </ItemGroup>
 </Project>

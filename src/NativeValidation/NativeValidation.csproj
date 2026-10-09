@@ -15,6 +15,6 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NativeAnnotations.Generator\NativeAnnotations.Generator.csproj" ReferenceOutputAssembly="false" OutputItemType="Analyzer" PrivateAssets="all" PackFolder="analyzers/dotnet/cs" />
+    <ProjectReference Include="..\NativeValidation.Generator\NativeValidation.Generator.csproj" ReferenceOutputAssembly="false" OutputItemType="Analyzer" PrivateAssets="all" PackFolder="analyzers/dotnet/cs" />
   </ItemGroup>
 </Project>

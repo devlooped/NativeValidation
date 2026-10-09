@@ -56,7 +56,7 @@ public class Address
     public string? Country { get; set; }
 }
 
-[UnconditionalSuppressMessage("Trimming", "IL2026", Justification = "NativeAnnotations inlines RangeAttribute at compile time and does not run its type-converter constructor.")]
+[UnconditionalSuppressMessage("Trimming", "IL2026", Justification = "NativeValidation inlines RangeAttribute at compile time and does not run its type-converter constructor.")]
 public class PaymentCard
 {
     [Required]

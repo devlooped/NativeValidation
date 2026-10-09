@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-    <Product>NativeAnnotations</Product>
+    <Product>NativeValidation</Product>
     <ImplicitUsings>true</ImplicitUsings>
   </PropertyGroup>
 </Project>

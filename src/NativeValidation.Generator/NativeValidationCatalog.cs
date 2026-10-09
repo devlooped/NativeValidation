@@ -21,7 +21,7 @@ namespace Devlooped
             "NVA001",
             "Validation attribute is not enforced",
             "'{0}' is not a built-in validation attribute this generator can enforce without reflection",
-            "NativeAnnotations",
+            "NativeValidation",
             DiagnosticSeverity.Warning,
             isEnabledByDefault: true);
 
@@ -29,7 +29,7 @@ namespace Devlooped
             "NVA002",
             "Validation attribute was skipped",
             "{0}",
-            "NativeAnnotations",
+            "NativeValidation",
             DiagnosticSeverity.Warning,
             isEnabledByDefault: true);
 

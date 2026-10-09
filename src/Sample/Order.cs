@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Devlooped.Sample;
 
-[UnconditionalSuppressMessage("Trimming", "IL2026", Justification = "NativeAnnotations inlines length and range attributes at compile time and does not run their reflection-based constructors.")]
+[UnconditionalSuppressMessage("Trimming", "IL2026", Justification = "NativeValidation inlines length and range attributes at compile time and does not run their reflection-based constructors.")]
 public class Order
 {
     [Required]

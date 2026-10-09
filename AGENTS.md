@@ -1,4 +1,4 @@
-# NativeAnnotations
+# NativeValidation
 
 AOT-safe `System.ComponentModel.DataAnnotations` validation, extracted from the Stunts data-annotation behavior so it can run without a proxy pipeline.
 
@@ -14,7 +14,7 @@ Namespace `Devlooped`.
 
 ## Generator
 
-`NativeAnnotations.Generator` ships inside the package at `analyzers/dotnet/cs`. It emits `Devlooped.Generated.NativeValidationRegistrations` when the compilation can see `Devlooped.NativeValidation`.
+`NativeValidation.Generator` ships inside the package at `analyzers/dotnet/cs`. It emits `Devlooped.Generated.NativeValidationRegistrations` when the compilation can see `Devlooped.NativeValidation`.
 
 Supported attributes match the built-in set enforced by `NativeValidator`, including `CustomValidationAttribute` as a direct static call. Any other `ValidationAttribute` subclass warns as `NVA001` and is not enforced. `NVA002` reports a supported attribute the generator had to skip.
 
