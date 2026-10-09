@@ -1,4 +1,4 @@
-![Icon](img/icon-32.png) NativeAnnotations
+![Icon](img/icon-32.png) NativeValidation
 ============
 
 [![Version](https://img.shields.io/nuget/vpre/Devlooped.DataAnnotations.NativeValidation.svg?color=royalblue)](https://www.nuget.org/packages/Devlooped.DataAnnotations.NativeValidation)
