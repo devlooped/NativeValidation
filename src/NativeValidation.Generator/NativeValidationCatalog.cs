@@ -1200,7 +1200,8 @@ namespace Devlooped
             }
 
             static bool IsValidated(IMethodSymbol method) =>
-                HasAttribute(method, "ValidatedAttribute");
+                HasAttribute(method, "ValidatedAttribute") ||
+                (method.IsGenericMethod && method.OriginalDefinition.GetAttributes().Any(attribute => IsValidation(attribute.AttributeClass)));
 
             static bool HasAttribute(IMethodSymbol method, string name) =>
                 method.OriginalDefinition.GetAttributes().Any(attribute =>

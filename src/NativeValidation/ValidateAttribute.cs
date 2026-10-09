@@ -15,6 +15,11 @@ namespace Devlooped.DataAnnotations
     /// <c>Make</c> tells the generator to substitute <c>Make&lt;int&gt;()</c> through factories it calls,
     /// including other <see cref="ValidatedAttribute"/> methods, up to eight levels.
     /// </para>
+    /// <para>
+    /// A generic method that carries any attribute derived from
+    /// <see cref="System.ComponentModel.DataAnnotations.ValidationAttribute"/> is treated as
+    /// <see cref="ValidatedAttribute"/> as well.
+    /// </para>
     /// </remarks>
     [AttributeUsage(AttributeTargets.Method, Inherited = false)]
     public sealed class ValidatedAttribute : Attribute
