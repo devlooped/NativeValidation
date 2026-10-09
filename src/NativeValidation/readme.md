@@ -6,6 +6,6 @@
 
 <!-- include https://github.com/devlooped/.github/raw/main/osmf.md -->
 
-<!-- include https://github.com/devlooped/sponsors/raw/main/footer.md -->
+<!-- include https://raw.githubusercontent.com/devlooped/sponsors/main/footer.md -->
 
 <!-- exclude -->

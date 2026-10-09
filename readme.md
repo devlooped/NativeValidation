@@ -155,7 +155,7 @@ A Native AOT library or console app that validates its own objects, method argum
 
 <!-- #content -->
 ---
-<!-- include https://github.com/devlooped/sponsors/raw/main/footer.md -->
+<!-- include https://raw.githubusercontent.com/devlooped/sponsors/main/footer.md -->
 # Sponsors 
 
 <!-- sponsors.md -->
@@ -192,4 +192,4 @@ A Native AOT library or console app that validates its own objects, method argum
 
 [Learn more about GitHub Sponsors](https://github.com/sponsors)
 
-<!-- https://github.com/devlooped/sponsors/raw/main/footer.md -->
+<!-- https://raw.githubusercontent.com/devlooped/sponsors/main/footer.md -->
