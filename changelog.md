@@ -1,5 +1,17 @@
 # Changelog
 
+## [v0.1.0-rc](https://github.com/devlooped/NativeValidation/tree/v0.1.0-rc) (2026-10-10)
+
+[Full Changelog](https://github.com/devlooped/NativeValidation/compare/v0.1.0-beta...v0.1.0-rc)
+
+:sparkles: Implemented enhancements:
+
+- Expose NativeValidatorAnalyzer for downstream packages [\#9](https://github.com/devlooped/NativeValidation/pull/9) (@kzu)
+
+:twisted_rightwards_arrows: Merged:
+
+- Move the generator into Devlooped.DataAnnotations [\#8](https://github.com/devlooped/NativeValidation/pull/8) (@kzu)
+
 ## [v0.1.0-beta](https://github.com/devlooped/NativeValidation/tree/v0.1.0-beta) (2026-10-09)
 
 [Full Changelog](https://github.com/devlooped/NativeValidation/compare/v0.1.0-alpha...v0.1.0-beta)
