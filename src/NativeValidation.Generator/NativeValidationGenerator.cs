@@ -1,6 +1,6 @@
 using Microsoft.CodeAnalysis;
 
-namespace Devlooped
+namespace Devlooped.DataAnnotations
 {
     /// <summary>
     /// Emits a module initializer that registers data-annotation rules.
