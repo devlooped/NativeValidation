@@ -10,7 +10,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 
-namespace Devlooped
+namespace Devlooped.DataAnnotations
 {
     static class NativeValidationCatalog
     {
