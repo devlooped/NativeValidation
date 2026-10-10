@@ -17,4 +17,7 @@
   <ItemGroup>
     <ProjectReference Include="..\NativeValidation.Generator\NativeValidation.Generator.csproj" ReferenceOutputAssembly="false" OutputItemType="Analyzer" PrivateAssets="all" PackFolder="analyzers/dotnet/cs" />
   </ItemGroup>
+  <ItemGroup>
+    <None Update="Devlooped.DataAnnotations.NativeValidation.targets" Pack="true" PackFolder="buildTransitive" />
+  </ItemGroup>
 </Project>
