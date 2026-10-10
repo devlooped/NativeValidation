@@ -1,5 +1,13 @@
 # Changelog
 
+## [v0.1.0-beta](https://github.com/devlooped/NativeValidation/tree/v0.1.0-beta) (2026-10-09)
+
+[Full Changelog](https://github.com/devlooped/NativeValidation/compare/v0.1.0-alpha...v0.1.0-beta)
+
+:sparkles: Implemented enhancements:
+
+- Treat ValidationAttribute on generic methods as Validated [\#7](https://github.com/devlooped/NativeValidation/pull/7) (@kzu)
+
 ## [v0.1.0-alpha](https://github.com/devlooped/NativeValidation/tree/v0.1.0-alpha) (2026-10-09)
 
 [Full Changelog](https://github.com/devlooped/NativeValidation/compare/e50145220a627c4b9b558608619ae1062b320b57...v0.1.0-alpha)
