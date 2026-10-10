@@ -1,8 +1,8 @@
 ![Icon](img/icon-32.png) NativeValidation
 ============
 
-[![Version](https://img.shields.io/nuget/vpre/Devlooped.DataAnnotations.NativeValidation.svg?color=royalblue)](https://www.nuget.org/packages/Devlooped.DataAnnotations.NativeValidation)
-[![Downloads](https://img.shields.io/nuget/dt/Devlooped.DataAnnotations.NativeValidation.svg?color=darkmagenta)](https://www.nuget.org/packages/Devlooped.DataAnnotations.NativeValidation)
+[![Version](https://img.shields.io/nuget/vpre/NativeValidation.svg?color=royalblue)](https://www.nuget.org/packages/NativeValidation)
+[![Downloads](https://img.shields.io/nuget/dt/NativeValidation.svg?color=darkmagenta)](https://www.nuget.org/packages/NativeValidation)
 [![EULA](https://img.shields.io/badge/EULA-OSMF-blue?labelColor=black&color=C9FF30)](https://github.com/devlooped/oss/blob/main/osmfeula.txt)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/devlooped/oss/blob/main/license.txt)
 
@@ -27,7 +27,7 @@ This package is that layer. The attributes stay on the members. A source generat
 
 ## What
 
-`Devlooped.DataAnnotations.NativeValidation` is AOT-safe validation for `System.ComponentModel.DataAnnotations` attributes. Reference the package. The APIs live in the `Devlooped.DataAnnotations` namespace. A source generator reads the attributes during compilation, emits the checks, and registers them from a module initializer. Generated code does not instantiate validation attributes and does not reflect over members.
+`NativeValidation` is AOT-safe validation for `System.ComponentModel.DataAnnotations` attributes. Reference the package. The APIs live in the `Devlooped.DataAnnotations` namespace. A source generator reads the attributes during compilation, emits the checks, and registers them from a module initializer. Generated code does not instantiate validation attributes and does not reflect over members.
 
 `NativeValidator` follows `Validator`:
 
