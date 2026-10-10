@@ -1,0 +1,12 @@
+<Project>
+
+  <!-- Analyzers do not flow through a package dependency. Downstream packages add this
+       generator when the annotated types live in the consuming compilation:
+
+         <Analyzer Include="$(NativeValidatorAnalyzer)" Condition="Exists('$(NativeValidatorAnalyzer)')" />
+  -->
+  <PropertyGroup>
+    <NativeValidatorAnalyzer Condition="'$(NativeValidatorAnalyzer)' == ''">$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\analyzers\dotnet\cs\NativeValidation.Generator.dll'))</NativeValidatorAnalyzer>
+  </PropertyGroup>
+
+</Project>

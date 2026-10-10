@@ -14,7 +14,7 @@ Namespace `Devlooped.DataAnnotations`.
 
 ## Generator
 
-`NativeValidation.Generator` ships inside the package at `analyzers/dotnet/cs`. It emits `Devlooped.Generated.NativeValidationRegistrations` when the compilation can see `Devlooped.DataAnnotations.NativeValidation`.
+`NativeValidation.Generator` ships inside the package at `analyzers/dotnet/cs`. It emits `Devlooped.Generated.NativeValidationRegistrations` when the compilation can see `Devlooped.DataAnnotations.NativeValidation`. `buildTransitive/Devlooped.DataAnnotations.NativeValidation.targets` sets `NativeValidatorAnalyzer` to that DLL. Analyzers do not flow through a package dependency, so a downstream package adds `$(NativeValidatorAnalyzer)` when the annotated types live in the consuming compilation.
 
 Supported attributes match the built-in set enforced by `NativeValidator`, including `CustomValidationAttribute` as a direct static call. Any other `ValidationAttribute` subclass warns as `NVA001` and is not enforced. `NVA002` reports a supported attribute the generator had to skip.
 
