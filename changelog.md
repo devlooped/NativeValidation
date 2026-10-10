@@ -1,5 +1,9 @@
 # Changelog
 
+## [v0.1.0](https://github.com/devlooped/NativeValidation/tree/v0.1.0) (2026-10-10)
+
+[Full Changelog](https://github.com/devlooped/NativeValidation/compare/v0.1.0-rc...v0.1.0)
+
 ## [v0.1.0-rc](https://github.com/devlooped/NativeValidation/tree/v0.1.0-rc) (2026-10-10)
 
 [Full Changelog](https://github.com/devlooped/NativeValidation/compare/v0.1.0-beta...v0.1.0-rc)
