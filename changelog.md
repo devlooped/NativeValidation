@@ -1,36 +1,22 @@
 # Changelog
 
+## [v0.1.1](https://github.com/devlooped/NativeValidation/tree/v0.1.1) (2026-10-10)
+
+[Full Changelog](https://github.com/devlooped/NativeValidation/compare/v0.1.0...v0.1.1)
+
 ## [v0.1.0](https://github.com/devlooped/NativeValidation/tree/v0.1.0) (2026-10-10)
 
-[Full Changelog](https://github.com/devlooped/NativeValidation/compare/v0.1.0-rc...v0.1.0)
-
-## [v0.1.0-rc](https://github.com/devlooped/NativeValidation/tree/v0.1.0-rc) (2026-10-10)
-
-[Full Changelog](https://github.com/devlooped/NativeValidation/compare/v0.1.0-beta...v0.1.0-rc)
+[Full Changelog](https://github.com/devlooped/NativeValidation/compare/e50145220a627c4b9b558608619ae1062b320b57...v0.1.0)
 
 :sparkles: Implemented enhancements:
 
 - Expose NativeValidatorAnalyzer for downstream packages [\#9](https://github.com/devlooped/NativeValidation/pull/9) (@kzu)
+- Treat ValidationAttribute on generic methods as Validated [\#7](https://github.com/devlooped/NativeValidation/pull/7) (@kzu)
+- Document why NativeValidation is needed for Native AOT [\#5](https://github.com/devlooped/NativeValidation/pull/5) (@kzu)
 
 :twisted_rightwards_arrows: Merged:
 
 - Move the generator into Devlooped.DataAnnotations [\#8](https://github.com/devlooped/NativeValidation/pull/8) (@kzu)
-
-## [v0.1.0-beta](https://github.com/devlooped/NativeValidation/tree/v0.1.0-beta) (2026-10-09)
-
-[Full Changelog](https://github.com/devlooped/NativeValidation/compare/v0.1.0-alpha...v0.1.0-beta)
-
-:sparkles: Implemented enhancements:
-
-- Treat ValidationAttribute on generic methods as Validated [\#7](https://github.com/devlooped/NativeValidation/pull/7) (@kzu)
-
-## [v0.1.0-alpha](https://github.com/devlooped/NativeValidation/tree/v0.1.0-alpha) (2026-10-09)
-
-[Full Changelog](https://github.com/devlooped/NativeValidation/compare/e50145220a627c4b9b558608619ae1062b320b57...v0.1.0-alpha)
-
-:sparkles: Implemented enhancements:
-
-- Document why NativeValidation is needed for Native AOT [\#5](https://github.com/devlooped/NativeValidation/pull/5) (@kzu)
 
 
 
